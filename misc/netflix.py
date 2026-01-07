@@ -35,9 +35,6 @@ viewing_data = [
 
 def analyze_engagement_patterns(viewing_data):
     # abandoned_df = viewing_data.filter("watched_secs / title_runtime_secs <= 0.25")
-    abandonded = []
-    sampled = []
-    complted = []
     pattern = {}
     viewing_category = None
     for d in viewing_data:
@@ -65,13 +62,7 @@ def analyze_engagement_patterns(viewing_data):
                 max_count = pattern[d][p]
                 dominant_pattern = p
     
-        # if dominant_pattern not in engagement.keys():
-        #     engagement[dominant_pattern] = 1
-        # else:
-        #     engagement[dominant_pattern] = engagement[dominant_pattern] + 1
-    
-        if d not in engagement.keys():
-            engagement[d] =  dominant_pattern
+        engagement[d] =  dominant_pattern
             
     return engagement
 
