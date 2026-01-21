@@ -40,35 +40,41 @@ class TestSplitStringWithPadding:
 
 
 class TestSplitString:
-    @pytest.mark.parametrize("s,w,expected_structure", [
+    @pytest.mark.parametrize("s,w,expected", [
         # Basic 2x2 table
         (
             [["ab", "cde"], ["fg", "hij"]],
             [2, 3],
             # Expected: 2 rows, each with line separators
-            True
+            "ab|cde\nfg|hij\n"
         ),
         
         # Single row, two columns
         (
             [["hello", "world"]],
             [3, 5],
-            True
+            "hel|world\nlo |     \n"
         ),
         
         # Single row, single column
         (
             [["test"]],
             [4],
-            True
+            "test\n"
+        ),
+        (
+            [["abcde", "defgh"], ["ij", "klmnopq"]],
+            [2, 5],
+            "ab|defgh\ncd|     \ne |     \nij|klmno\n  |pq   \n"
         ),
     ])
-    def test_split_string_basic_structure(self, s, w, expected_structure):
+    def test_split_string_basic_structure(self, s, w, expected):
         result = split_string(s, w)
         assert isinstance(result, list)
         assert len(result) > 0
         # Check that result contains strings and newlines
         assert any("\n" in str(item) or "|" in str(item) for item in result)
+        assert "".join(result) == expected
     
     @pytest.mark.parametrize("s,w", [
         ([["abc", "defgh"], ["ij", "klmnopq"]], [2, 5]),
