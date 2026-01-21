@@ -1,4 +1,7 @@
-import math
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from utils.split_string import split_string_with_padding, split_string
 
 def longest_repeating_substring(s: str) -> str:
     n = len(s)
@@ -99,36 +102,6 @@ def my_longest_unique_substring(s):
 
     return max_len
 
-def split_string_with_padding(text, length, elements):
-    """
-    Breaks a string into a list of strings of a specified length.
-    Pads the final string with spaces if it is shorter than the length.
-    """
-    if length <= 0:
-        return [text]
-
-    # Create the initial list of chunks
-    chunks = [text[i:i + length] for i in range(0, len(text), length)]
-
-    # Check if the last chunk needs padding
-    if chunks and len(chunks[-1]) < length:
-        chunks[-1] = chunks[-1].ljust(length)
-
-    if len(chunks) < elements:
-        for _ in range(elements - len(chunks)):
-            chunks.append(" " * length)
-    return chunks
-
-
-def my_new_print(s, w):
-    for i in range(len(s)):
-        lengths = [len(s[i][j]) / w[j] for j in range(len(s[i]))]
-        max_len = math.ceil(max(lengths))
-        chunks = [split_string_with_padding(s[i][j], w[j], max_len) for j in range(len(s[i]))]
-        for k in range(max_len):
-            p = "|".join([chunks[j][k] for j in range(len(s[i]))])
-            print(p)
-
 
 if __name__ == "__main__":
     test_str = "banana"
@@ -148,8 +121,9 @@ if __name__ == "__main__":
 # c |     
 # ij|klmno
 #   |pq   
-    
-    my_new_print(s, w)
+
+    to_print = split_string(s, w)
+    print("".join(to_print))
 
     s = [
         ["123456789012", "1234567", "1234567890"],
@@ -157,62 +131,5 @@ if __name__ == "__main__":
         ["12345", "12345678901", "12"],
     ]
     w = [3, 7, 3]
-    my_new_print(s, w)
-
-
-# Suppose that you have a list s of m lists, with each s[i] containing
-# n nonempty strings. We want to print these strings as a table in a 
-# terminal. The table needs to have n columns, the kth one having width 
-# w[k]. Each pair of adjacent columns must be separated by a pipe 
-# character ('|').
- 
-# Visualization:
- 
-# s[0][0]  |s[0][1]  | ... |s[0][n-1]
-# s[1][0]  |s[1][1]  | ... |s[1][n-1]
-# ...
-# s[m-1][0]|s[m-1][1]| ... |s[m-1][n-1]
- 
-# If a string s[i][k] is longer than than the width w[k] of its column,
-# it will be wrapped. This means that the row of the table will span at
-# least ceil(len(s[i][k]) / w[k]) lines of text. For example, if you 
-# need to print the string 'abcdefghij' in a column of width 4, it
-# should look like
-# ...|abcd|...
-# ...|efgh|...
-# ...|ij  |...
-# and so the row containing that string must span at least 3 lines of
-# text.
- 
-# Given s and w, print the table. (No need to worry about space/time complexity.)
- 
-# Examples:
-# Input:
-# s = [
-#   ["abc", "defgh"],
-#   ["ij", "klmnopq"]
-# ]
-# w = [2, 5]
-# Output:
-# ab|defgh
-# c |     
-# ij|klmno
-#   |pq   
- 
-# Input:
-# s = [
-#  ["123456789012", "1234567", "1234567890"],
-#  ["123", "123456789012345", "12345"],
-#  ["12345", "12345678901", "12"],
-# ]
-# w = [3, 7, 3]
-# Output:
-# 123|1234567|123
-# 456|       |456
-# 789|       |789
-# 012|       |0  
-# 123|1234567|123
-#    |8901234|45 
-#    |5      |   
-# 123|1234567|12 
-# 45 |8901   |   
+    # to_print = split_string(s, w)
+    # print("".join(to_print))
